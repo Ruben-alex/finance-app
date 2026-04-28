@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Personal Finance Dashboard</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <div class="container">
+        <div class="brand">
+          <div class="brand__logo" aria-hidden="true">PF</div>
+          <div class="brand__text">
+            <div class="brand__title">Personal Finance Dashboard</div>
+            <div class="brand__subtitle">Track income & expenses. Know your balance.</div>
+          </div>
+        </div>
+        <div class="topbar__actions">
+          <button id="exportBtn" class="btn btn--ghost" type="button" title="Export your data to a file">
+            Export
+          </button>
+          <label class="btn btn--ghost fileBtn" title="Import data from a file">
+            Import
+            <input id="importInput" type="file" accept="application/json" hidden />
+          </label>
+          <button id="resetBtn" class="btn btn--danger" type="button" title="Clear all transactions">
+            Reset
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <main class="container main">
+      <section class="grid grid--cards" aria-label="Summary">
+        <div class="card card--balance" role="status" aria-live="polite">
+          <div class="card__label">Balance</div>
+          <div id="balanceValue" class="card__value">₹0</div>
+          <div id="balanceHint" class="card__hint">Add transactions to see your balance.</div>
+        </div>
+        <div class="card">
+          <div class="card__label">Income</div>
+          <div id="incomeValue" class="card__value card__value--income">₹0</div>
+          <div class="card__hint">Money coming in</div>
+        </div>
+        <div class="card">
+          <div class="card__label">Expenses</div>
+          <div id="expenseValue" class="card__value card__value--expense">₹0</div>
+          <div class="card__hint">Money going out</div>
+        </div>
+      </section>
+
+      <section class="grid grid--main" aria-label="Add transaction and list">
+        <div class="panel">
+          <div class="panel__header">
+            <h2 class="panel__title">Add a transaction</h2>
+            <p class="panel__subtitle">Choose income or expense, enter amount, and save.</p>
+          </div>
+
+          <form id="txForm" class="form" autocomplete="off">
+            <div class="form__row">
+              <div class="field">
+                <label class="field__label" for="type">Type</label>
+                <select id="type" class="field__control" required>
+                  <option value="expense" selected>Expense</option>
+                  <option value="income">Income</option>
+                </select>
+              </div>
+
+              <div class="field">
+                <label class="field__label" for="amount">Amount</label>
+                <input
+                  id="amount"
+                  class="field__control"
+                  type="number"
+                  inputmode="decimal"
+                  min="0.01"
+                  step="0.01"
+                  placeholder="e.g. 499.99"
+                  required
+                />
+                <div class="field__help">Tip: Use positive numbers only.</div>
+              </div>
+            </div>
+
+            <div class="form__row">
+              <div class="field">
+                <label class="field__label" for="category">Category</label>
+                <input id="category" class="field__control" type="text" placeholder="e.g. Groceries" />
+              </div>
+              <div class="field">
+                <label class="field__label" for="date">Date</label>
+                <input id="date" class="field__control" type="date" required />
+              </div>
+            </div>
+
+            <div class="form__row">
+              <div class="field field--full">
+                <label class="field__label" for="note">Note (optional)</label>
+                <input id="note" class="field__control" type="text" placeholder="e.g. Weekly grocery shopping" />
+              </div>
+            </div>
+
+            <div class="form__actions">
+              <button id="submitBtn" class="btn btn--primary" type="submit">Add transaction</button>
+              <button id="cancelEditBtn" class="btn btn--ghost" type="button" hidden>Cancel edit</button>
+            </div>
+
+            <div id="formMessage" class="form__message" role="status" aria-live="polite"></div>
+          </form>
+        </div>
+
+        <div class="panel">
+          <div class="panel__header">
+            <h2 class="panel__title">Transactions</h2>
+            <div class="panel__toolbar">
+              <div class="segmented" role="tablist" aria-label="Filter">
+                <button class="segmented__btn" type="button" data-filter="all" aria-selected="true">All</button>
+                <button class="segmented__btn" type="button" data-filter="income" aria-selected="false">Income</button>
+                <button class="segmented__btn" type="button" data-filter="expense" aria-selected="false">Expenses</button>
+              </div>
+              <div class="field field--search">
+                <label class="field__label" for="search">Search</label>
+                <input id="search" class="field__control" type="search" placeholder="Category or note..." />
+              </div>
+            </div>
+          </div>
+
+          <div class="tableWrap" role="region" aria-label="Transaction list">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Date</th>
+                  <th>Type</th>
+                  <th>Category</th>
+                  <th>Note</th>
+                  <th class="table__right">Amount</th>
+                  <th class="table__right">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="txTbody"></tbody>
+            </table>
+            <div id="emptyState" class="empty" hidden>
+              <div class="empty__title">No transactions yet</div>
+              <div class="empty__subtitle">Add your first income or expense on the left.</div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <div class="container footer__inner">
+        <div>Data is saved locally in your browser (no login needed).</div>
+        <div class="footer__muted">Tip: Use Export/Import to back up or move your data.</div>
+      </div>
+    </footer>
+
+    <script src="./app.js"></script>
+  </body>
+</html>
