@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Personal Finance Dashboard</title>
     <link rel="stylesheet" href="./styles.css" />
+    <script>
+      window.APP_CONFIG = window.APP_CONFIG || {};
+    </script>
   </head>
   <body>
     <header class="topbar">
@@ -17,6 +20,16 @@
           </div>
         </div>
         <div class="topbar__actions">
+          <button id="themeToggleBtn" class="btn btn--ghost themeToggle" type="button" title="Switch to light mode" aria-label="Switch to light mode">
+            <svg class="themeToggle__icon themeToggle__icon--sun" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <circle cx="12" cy="12" r="4"></circle>
+              <path d="M12 2v2.5M12 19.5V22M4.93 4.93l1.77 1.77M17.3 17.3l1.77 1.77M2 12h2.5M19.5 12H22M4.93 19.07l1.77-1.77M17.3 6.7l1.77-1.77"></path>
+            </svg>
+            <svg class="themeToggle__icon themeToggle__icon--moon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <path d="M20.7 14.2A8.5 8.5 0 1 1 9.8 3.3a7 7 0 1 0 10.9 10.9z"></path>
+            </svg>
+            <span class="srOnly">Toggle color theme</span>
+          </button>
           <button id="exportBtn" class="btn btn--ghost" type="button" title="Export your data to a file">
             Export
           </button>
@@ -32,21 +45,47 @@
     </header>
 
     <main class="container main">
-      <section class="grid grid--cards" aria-label="Summary">
+      <section class="grid grid--cards" aria-label="Stats Cards">
         <div class="card card--balance" role="status" aria-live="polite">
-          <div class="card__label">Balance</div>
+          <div class="card__label">Total Balance</div>
           <div id="balanceValue" class="card__value">₹0</div>
           <div id="balanceHint" class="card__hint">Add transactions to see your balance.</div>
         </div>
         <div class="card">
-          <div class="card__label">Income</div>
-          <div id="incomeValue" class="card__value card__value--income">₹0</div>
-          <div class="card__hint">Money coming in</div>
+          <div class="card__label">Monthly Spending</div>
+          <div id="monthlySpendingValue" class="card__value card__value--expense">₹0</div>
+          <div class="card__hint">Current month expenses</div>
         </div>
         <div class="card">
-          <div class="card__label">Expenses</div>
-          <div id="expenseValue" class="card__value card__value--expense">₹0</div>
-          <div class="card__hint">Money going out</div>
+          <div class="card__label">Top Category</div>
+          <div id="topCategoryValue" class="card__value">—</div>
+          <div id="topCategoryHint" class="card__hint">Most spent category this month</div>
+        </div>
+      </section>
+
+      <section class="grid grid--insights" aria-label="Analytics and AI Insights">
+        <div class="panel">
+          <div class="panel__header">
+            <h2 class="panel__title">Weekly Expenses</h2>
+            <p class="panel__subtitle">A clean weekly snapshot of your spending trend.</p>
+          </div>
+          <div class="chartWrap">
+            <div id="weeklyChartRoot" class="chartRoot" aria-label="Weekly expenses bar chart"></div>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="panel__header">
+            <h2 class="panel__title">AI Insights</h2>
+            <p class="panel__subtitle">One personalized savings tip based on your latest expenses.</p>
+          </div>
+          <div class="aiInsights">
+            <button id="generateInsightBtn" class="btn btn--primary" type="button">Generate Smart Tip</button>
+            <div id="insightStatus" class="aiInsights__status" role="status" aria-live="polite"></div>
+            <div id="insightText" class="aiInsights__tip">
+              Connect Supabase and your AI key in `window.APP_CONFIG` to generate a personalized insight.
+            </div>
+          </div>
         </div>
       </section>
 
@@ -156,6 +195,10 @@
       </div>
     </footer>
 
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/recharts/umd/Recharts.min.js"></script>
     <script src="./app.js"></script>
   </body>
 </html>
